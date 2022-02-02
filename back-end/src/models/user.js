@@ -3,21 +3,26 @@ const { isEmail } = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: [true, "Please enter your name."],
-        trim: true,
-        unique: true,
-        validate: [isEmail, "Please enter a valid email address."],
-        lowercase: true
+const userSchema = new mongoose.Schema(
+    {
+        email: {
+            type: String,
+            required: [true, "Please enter your name."],
+            trim: true,
+            unique: true,
+            validate: [isEmail, "Please enter a valid email address."],
+            lowercase: true
+        },
+        password: {
+            type: String,
+            required: [true, "Please enter your password."],
+            minlength: [6, "Your password must be at least 6 characters long."]
+        }
     },
-    password: {
-        type: String,
-        required: [true, "Please enter your password."],
-        minlength: [6, "Your password must be at least 6 characters long."]
+    {
+        timestamps: true
     }
-});
+);
 
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email });
