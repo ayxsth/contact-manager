@@ -1,22 +1,32 @@
 const { Router } = require("express");
+const auth = require("../middleware/auth");
 const upload = require("../middleware/upload");
-const { save, viewAll } = require("../controllers/contact");
+const { save, viewAll, update, remove } = require("../controllers/contact");
 
 const router = Router();
 
-router.get("/contacts", viewAll);
+router.get("/contacts", auth, viewAll);
 
 router.post(
     "/contacts",
-    upload.single("upload"),
+    auth,
+    upload.single("image"),
     save,
     (err, req, res, next) => {
         res.status(400).send({ error: err.message });
     }
 );
 
-router.put("/contacts:id", (req, res) => {});
+router.put(
+    "/contacts/:id",
+    auth,
+    upload.single("image"),
+    update,
+    (err, req, res, next) => {
+        res.status(400).send({ error: err.message });
+    }
+);
 
-router.delete("contacts:id", (req, res) => {});
+router.delete("/contacts/:id", auth, remove);
 
 module.exports = router;

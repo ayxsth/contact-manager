@@ -5,7 +5,8 @@ const signup = async (req, res) => {
         const { email, password } = req.body;
         const user = new User({ email, password });
         await user.save();
-        res.status(201).send(user);
+        const token = user.generateAuthToken();
+        res.status(201).send({ user, token });
     } catch (e) {
         res.status(400).send({ error: e.message });
     }

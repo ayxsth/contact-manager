@@ -1,4 +1,7 @@
+const fs = require("fs");
 const mongoose = require("mongoose");
+const imgur = require("imgur");
+const sharp = require("sharp");
 
 const contactSchema = new mongoose.Schema(
     {
@@ -16,12 +19,35 @@ const contactSchema = new mongoose.Schema(
         image: {
             type: String,
             default: "https://imgur.com/gallery/YZlcj"
+        },
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "User"
         }
     },
     {
         timestamps: true
     }
 );
+
+contactSchema.methods.addImage = async function (imageBuffer) {
+    if (imageBuffer) {
+        await sharp(imageBuffer)
+            .resize({
+                width: 350,
+                height: 350
+            })
+            .png()
+            .toFile("image.png");
+
+        const { link: image } = await imgur.uploadFile("image.png");
+
+        this.image = image;
+
+        fs.unlinkSync("image.png");
+    }
+};
 
 const Contact = mongoose.model("Contact", contactSchema);
 
