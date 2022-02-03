@@ -1,17 +1,32 @@
-const multer = require("multer");
+const fs = require("fs");
+const imgur = require("imgur");
+const sharp = require("sharp");
 const Contact = require("../models/contact");
 
 const save = async (req, res) => {
     try {
+        await sharp(req.file.buffer)
+            .resize({
+                width: 350,
+                height: 350
+            })
+            .png()
+            .toFile("image.png");
+
+        const { link: image } = await imgur.uploadFile("image.png");
         const { name, phone } = req.body;
         const contact = new Contact({
             name,
-            phone
+            phone,
+            image
         });
+
         await contact.save();
         res.status(201).send(contact);
     } catch (e) {
         res.status(400).send({ error: e.message });
+    } finally {
+        fs.unlinkSync("image.png");
     }
 };
 
