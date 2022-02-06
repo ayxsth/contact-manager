@@ -1,0 +1,260 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=VT323&display=swap");
+
+* {
+    box-sizing: border-box;
+    font-family: "Poppins";
+}
+
+body {
+    margin: 20px;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    max-width: 960px;
+    margin: 0 auto;
+    border-bottom: 1px solid #e2e2e2;
+    margin-bottom: 40px;
+}
+
+nav h1 {
+    margin-right: auto;
+}
+
+.nav-link {
+    padding: 6px;
+    border-radius: 3px;
+    border: 1px solid #00a0ff;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.sign-in,
+.add-contact {
+    color: #fff;
+    background-color: #00a0ff;
+}
+
+.sign-up {
+    color: #00a0ff;
+}
+
+.log-out {
+    border: 1px solid #e64d67;
+    color: #e64d67;
+}
+
+.sign-in:hover,
+.add-contact:hover {
+    border: 1px solid #005e94;
+    background-color: #005e94;
+    color: #fff;
+}
+
+.sign-up:hover {
+    background-color: #00a0ff;
+    color: #fff;
+}
+
+.log-out:hover {
+    background-color: #e64d67;
+    color: #fff;
+}
+
+#logo {
+    color: #00a0ff;
+    user-select: none;
+}
+
+#logo:hover {
+    color: #005e94;
+}
+
+a {
+    color: #00a0ff;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+a:hover {
+    color: #005e94;
+}
+
+img {
+    max-width: 100%;
+}
+
+.welcome {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.welcome-msg {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 3px;
+    margin-top: 20px;
+}
+
+.form-wrapper {
+    padding: 20px 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 600px;
+    margin: 0 auto;
+}
+
+form {
+    width: 85%;
+    margin: 50px auto;
+}
+
+.form-wrapper h2 {
+    text-align: center;
+}
+
+.form-group {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: inherit;
+    font-size: 18px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 6px 4px;
+    font-size: 14px;
+    margin-top: 2px;
+    outline: none;
+    border: 1.3px solid #00a0ff;
+    border-radius: 3px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.file-container label {
+    border: 1px solid #00a0ff;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 8px;
+    font-size: 14px;
+    width: 100px;
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 2px;
+    margin-right: 10px;
+    transition: all 0.3s;
+}
+
+.file-container label:hover {
+    background-color: #00a0ff;
+    color: #fff;
+}
+
+.file-container span {
+    color: #696969;
+    font-size: 14px;
+}
+
+.form-action {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.form-wrapper p {
+    color: #e64d67;
+}
+
+.form-action button,
+.btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #00a0ff;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+.form-action button:hover,
+.btn:hover {
+    background-color: #005e94;
+}
+
+.form-action a {
+    font-size: 14px;
+}
+
+.content {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 20px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.contact .actions {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.btn {
+    border: 2px solid #00a0ff;
+    background-color: #fff;
+    color: #00a0ff;
+    transition: all 0.3s;
+    padding: 5px;
+    margin: 2px;
+}
+
+.btn:first-child {
+    padding: 5px 8px;
+}
+
+.btn:last-child {
+    border: 2px solid #e64d67;
+    background-color: #fff;
+    color: #e64d67;
+}
+
+.btn:hover {
+    background-color: #00a0ff;
+    color: #fff;
+}
+
+.btn:last-child:hover {
+    background-color: #e64d67;
+    color: #fff;
+}

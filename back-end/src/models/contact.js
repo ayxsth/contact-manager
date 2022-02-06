@@ -18,7 +18,7 @@ const contactSchema = new mongoose.Schema(
         },
         image: {
             type: String,
-            default: "https://imgur.com/gallery/YZlcj"
+            default: "https://i.imgur.com/tdi3NGa.png"
         },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
