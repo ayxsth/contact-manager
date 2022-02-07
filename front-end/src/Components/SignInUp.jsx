@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SignInUp = ({ register }) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     return (
         <div>
             <div className="form-wrapper">
@@ -12,6 +16,8 @@ const SignInUp = ({ register }) => {
                             type="email"
                             className="form-control"
                             id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
@@ -21,6 +27,8 @@ const SignInUp = ({ register }) => {
                             type="password"
                             className="form-control"
                             id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>

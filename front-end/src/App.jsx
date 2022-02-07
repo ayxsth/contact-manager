@@ -6,8 +6,12 @@ import SignUp from "./Components/SignUp";
 import ContactList from "./Components/ContactList";
 import AddContact from "./Components/AddContact";
 import UpdateContact from "./Components/UpdateContact";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
+    const auth = useSelector((state) => state.auth);
+    const error = useSelector((state) => state.error);
+    const dispatch = useDispatch();
     return (
         <Router>
             <div className="App">
@@ -19,7 +23,7 @@ function App() {
                         <Route path="/register" element={<SignUp />} />
                         <Route path="/add-contact" element={<AddContact />} />
                         <Route
-                            path="/update-contact"
+                            path="/update-contact/:id"
                             element={<UpdateContact />}
                         />
                         <Route path="/contact-list" element={<ContactList />} />

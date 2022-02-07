@@ -19,12 +19,12 @@ const contactSchema = new mongoose.Schema(
         image: {
             type: String,
             default: "https://i.imgur.com/tdi3NGa.png"
-        },
-        owner: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: "User"
         }
+        // owner: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     required: true,
+        //     ref: "User"
+        // }
     },
     {
         timestamps: true

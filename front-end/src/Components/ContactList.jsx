@@ -1,27 +1,60 @@
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setContacts } from "../redux/actions/contacts";
+
 const ContactList = () => {
+    const contacts = useSelector((state) => state.contacts.contacts);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const fetchContacts = async () => {
+        const res = await axios.get("/contacts").catch((e) => navigate("/"));
+        dispatch(setContacts(res.data));
+    };
+
+    const deleteContact = async (id) => {
+        await axios
+            .delete(`/contacts/${id}`)
+            .catch((e) => console.log(e.message));
+        fetchContacts();
+    };
+
+    useEffect(() => {
+        fetchContacts();
+    }, []);
+
     return (
         <div className="contact-wrapper">
             <h2>Contacts</h2>
             <div className="contacts">
-                {[1, 2, 3, 4].map((contact) => {
+                {contacts.map((contact) => {
                     return (
-                        <div className="contact" key={contact}>
+                        <div className="contact" key={contact._id}>
                             <img
-                                src="https://i.imgur.com/tdi3NGa.png"
+                                src={contact.image}
                                 alt="profile"
                                 width="100px"
                             />
                             <div className="contact-info">
-                                <h3>{contact}</h3>
-                                <span>9841242222</span>
+                                <h3>{contact.name}</h3>
+                                <span>{contact.phone}</span>
                             </div>
                             <div className="actions">
-                                <a className="btn" href="/update-contact">
+                                <Link
+                                    className="btn"
+                                    to={`/update-contact/${contact._id}`}
+                                >
                                     Edit
-                                </a>
-                                <a className="btn" href="/">
+                                </Link>
+                                <button
+                                    className="btn"
+                                    onClick={() => deleteContact(contact._id)}
+                                >
                                     Delete
-                                </a>
+                                </button>
                             </div>
                         </div>
                     );

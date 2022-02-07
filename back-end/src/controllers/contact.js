@@ -5,8 +5,8 @@ const save = async (req, res) => {
         const { name, phone } = req.body;
         const contact = new Contact({
             name,
-            phone,
-            owner: req.user._id
+            phone
+            // owner: req.user._id
         });
 
         await contact.addImage(req.file?.buffer);
@@ -17,9 +17,21 @@ const save = async (req, res) => {
     }
 };
 
+const view = async (req, res) => {
+    try {
+        const contact = await Contact.findById(req.params.id);
+        if (!contact) {
+            return res.status(404).send({ error: "Please enter valid id." });
+        }
+        res.send(contact);
+    } catch (e) {
+        res.status(500).send({ error: e.message });
+    }
+};
+
 const viewAll = async (req, res) => {
     try {
-        const contacts = await Contact.find({ owner: req.user._id });
+        const contacts = await Contact.find({});
         res.send(contacts);
     } catch (e) {
         res.status(500).send({ error: e.message });
@@ -28,7 +40,7 @@ const viewAll = async (req, res) => {
 
 const update = async (req, res) => {
     const { id: _id } = req.params;
-    const allowedUpdates = ["name", "phone"];
+    const allowedUpdates = ["name", "phone", "image"];
     const updates = Object.keys(req.body);
     const isValidInputs = updates.every((update) =>
         allowedUpdates.includes(update)
@@ -40,15 +52,19 @@ const update = async (req, res) => {
         }
 
         const contact = await Contact.findOne({
-            _id,
-            owner: req.user._id
+            _id
+            // owner: req.user._id
         });
 
         if (!contact) {
             return res.status(404).send({ error: "Please enter valid id." });
         }
 
-        updates.forEach((update) => (contact[update] = req.body[update]));
+        updates.forEach((update) => {
+            if (update !== "image") {
+                contact[update] = req.body[update];
+            }
+        });
 
         await contact.addImage(req.file?.buffer);
         await contact.save();
@@ -62,8 +78,8 @@ const remove = async (req, res) => {
     const { id: _id } = req.params;
     try {
         const contact = await Contact.findOne({
-            _id,
-            owner: req.user._id
+            _id
+            // owner: req.user._id
         });
 
         if (!contact) {
@@ -80,6 +96,7 @@ const remove = async (req, res) => {
 module.exports = {
     save,
     viewAll,
+    view,
     update,
     remove
 };

@@ -1,15 +1,23 @@
 const { Router } = require("express");
 const auth = require("../middleware/auth");
 const upload = require("../middleware/upload");
-const { save, viewAll, update, remove } = require("../controllers/contact");
+const {
+    save,
+    viewAll,
+    view,
+    update,
+    remove
+} = require("../controllers/contact");
 
 const router = Router();
 
-router.get("/contacts", auth, viewAll);
+router.get("/contacts", viewAll);
+
+router.get("/contacts/:id", view);
 
 router.post(
     "/contacts",
-    auth,
+    // auth,
     upload.single("image"),
     save,
     (err, req, res, next) => {
@@ -19,7 +27,7 @@ router.post(
 
 router.put(
     "/contacts/:id",
-    auth,
+    // auth,
     upload.single("image"),
     update,
     (err, req, res, next) => {
@@ -27,6 +35,6 @@ router.put(
     }
 );
 
-router.delete("/contacts/:id", auth, remove);
+router.delete("/contacts/:id", remove);
 
 module.exports = router;
