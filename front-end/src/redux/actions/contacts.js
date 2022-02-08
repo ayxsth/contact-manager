@@ -1,4 +1,4 @@
-import { GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT } from "./types";
+import { GET_CONTACTS, CLEAR_CONTACTS } from "./types";
 
 export const setContacts = (contacts) => {
     return {
@@ -10,5 +10,11 @@ export const setContacts = (contacts) => {
 export const getContacts = () => {
     return {
         type: GET_CONTACTS
+    };
+};
+
+export const clearContacts = () => {
+    return {
+        type: CLEAR_CONTACTS
     };
 };

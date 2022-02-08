@@ -1,11 +1,15 @@
 import Welcome from "./Welcome";
 import ContactList from "./ContactList";
+import { useSelector } from "react-redux";
 
-const Home = ({ isLogged = true }) => {
+const Home = () => {
+    const auth = useSelector((state) => state.auth);
+    const { isAuthenticated } = auth;
+
     return (
         <div className="home">
-            {!isLogged && <Welcome />}
-            {isLogged && <ContactList />}
+            {!isAuthenticated && <Welcome />}
+            {isAuthenticated && <ContactList />}
         </div>
     );
 };

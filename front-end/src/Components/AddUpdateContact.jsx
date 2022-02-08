@@ -35,14 +35,22 @@ const AddUpdateContact = ({ edit }) => {
 
     const saveContact = async (formData) => {
         await axios
-            .post("/contacts", formData)
+            .post("/contacts", formData, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            })
             .catch((e) => console.log(e.message));
         navigate("/");
     };
 
     const updateContact = async (formData) => {
         await axios
-            .put(`/contacts/${contact._id}`, formData)
+            .put(`/contacts/${contact._id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            })
             .catch((e) => console.log(e.message));
         navigate("/");
     };

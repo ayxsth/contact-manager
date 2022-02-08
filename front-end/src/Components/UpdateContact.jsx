@@ -11,7 +11,11 @@ const UpdateContact = () => {
     const navigate = useNavigate();
     const fetchContact = async (id) => {
         const res = await axios
-            .get(`/contacts/${id}`)
+            .get(`/contacts/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            })
             .catch((e) => navigate("/"));
         dispatch(setContact(res.data));
     };

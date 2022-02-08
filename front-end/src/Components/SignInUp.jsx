@@ -1,15 +1,45 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { authUser } from "../redux/actions/auth";
 
 const SignInUp = ({ register }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+    const login = async (email, password) => {
+        const res = await axios
+            .post("/signin", { email, password })
+            .catch((e) => console.log(e));
+        sessionStorage.setItem("token", res.data.token);
+        dispatch(authUser({ ...res.data, isAuthenticated: true }));
+        navigate("/");
+    };
+
+    const singup = async (email, password) => {
+        const res = await axios
+            .post("/signup", { email, password })
+            .catch((e) => console.log(e));
+        sessionStorage.setItem("token", res.data.token);
+        dispatch(authUser({ ...res.data, isAuthenticated: true }));
+        navigate("/");
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (register) singup(email, password);
+        else login(email, password);
+    };
 
     return (
         <div>
             <div className="form-wrapper">
                 <h2>{register ? "Sign Up Here" : "Sign In Here"}</h2>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
                         <input

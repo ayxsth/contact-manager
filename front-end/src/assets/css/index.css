@@ -46,6 +46,8 @@ nav h1 {
 .log-out {
     border: 1px solid #e64d67;
     color: #e64d67;
+    cursor: pointer;
+    background-color: #fff;
 }
 
 .sign-in:hover,

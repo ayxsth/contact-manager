@@ -6,12 +6,29 @@ import SignUp from "./Components/SignUp";
 import ContactList from "./Components/ContactList";
 import AddContact from "./Components/AddContact";
 import UpdateContact from "./Components/UpdateContact";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { authUser } from "./redux/actions/auth";
+import { useEffect } from "react";
 
 function App() {
-    const auth = useSelector((state) => state.auth);
-    const error = useSelector((state) => state.error);
     const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth);
+    const { isAuthenticated } = auth;
+
+    const checkAuth = async () => {
+        const res = await axios.get("/user", {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            }
+        });
+        dispatch(authUser({ ...res.data, isAuthenticated: true }));
+    };
+
+    useEffect(() => {
+        checkAuth();
+    }, []);
+
     return (
         <Router>
             <div className="App">
@@ -19,14 +36,28 @@ function App() {
                 <div className="content">
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/login" element={<SignIn />} />
-                        <Route path="/register" element={<SignUp />} />
-                        <Route path="/add-contact" element={<AddContact />} />
+                        <Route
+                            path="/login"
+                            element={isAuthenticated ? <Home /> : <SignIn />}
+                        />
+                        <Route
+                            path="/register"
+                            element={isAuthenticated ? <Home /> : <SignUp />}
+                        />
+                        <Route
+                            path="/add-contact"
+                            element={
+                                isAuthenticated ? <AddContact /> : <SignIn />
+                            }
+                        />
                         <Route
                             path="/update-contact/:id"
-                            element={<UpdateContact />}
+                            element={
+                                isAuthenticated ? <UpdateContact /> : <SignIn />
+                            }
                         />
                         <Route path="/contact-list" element={<ContactList />} />
+                        <Route path="*" element={<Home />} />
                     </Routes>
                 </div>
             </div>

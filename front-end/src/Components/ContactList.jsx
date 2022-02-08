@@ -6,18 +6,28 @@ import { useDispatch } from "react-redux";
 import { setContacts } from "../redux/actions/contacts";
 
 const ContactList = () => {
-    const contacts = useSelector((state) => state.contacts.contacts);
+    const contacts = useSelector((state) => state.contacts.contacts) || [];
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const fetchContacts = async () => {
-        const res = await axios.get("/contacts").catch((e) => navigate("/"));
+        const res = await axios
+            .get("/contacts", {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            })
+            .catch((e) => navigate("/"));
         dispatch(setContacts(res.data));
     };
 
     const deleteContact = async (id) => {
         await axios
-            .delete(`/contacts/${id}`)
+            .delete(`/contacts/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            })
             .catch((e) => console.log(e.message));
         fetchContacts();
     };

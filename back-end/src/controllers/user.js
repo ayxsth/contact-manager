@@ -23,7 +23,17 @@ const signin = async (req, res) => {
     }
 };
 
+const getUser = (req, res) => {
+    try {
+        const { user } = req;
+        res.send(user);
+    } catch (e) {
+        res.status(404).send({ error: e.message });
+    }
+};
+
 module.exports = {
     signup,
-    signin
+    signin,
+    getUser
 };

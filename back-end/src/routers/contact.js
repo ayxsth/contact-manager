@@ -11,13 +11,13 @@ const {
 
 const router = Router();
 
-router.get("/contacts", viewAll);
+router.get("/contacts", auth, viewAll);
 
-router.get("/contacts/:id", view);
+router.get("/contacts/:id", auth, view);
 
 router.post(
     "/contacts",
-    // auth,
+    auth,
     upload.single("image"),
     save,
     (err, req, res, next) => {
@@ -27,7 +27,7 @@ router.post(
 
 router.put(
     "/contacts/:id",
-    // auth,
+    auth,
     upload.single("image"),
     update,
     (err, req, res, next) => {
@@ -35,6 +35,6 @@ router.put(
     }
 );
 
-router.delete("/contacts/:id", remove);
+router.delete("/contacts/:id", auth, remove);
 
 module.exports = router;
