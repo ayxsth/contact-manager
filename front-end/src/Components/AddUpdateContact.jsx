@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { setProcess } from "../redux/actions/process";
+import { getError, clearError } from "../redux/actions/error";
 
 const AddUpdateContact = ({ edit }) => {
     const contact = useSelector((state) => state.contact);
+    const process = useSelector((state) => state.process);
+    const { isProcessing } = process;
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [image, setImage] = useState("");
     const [profileName, setProfileName] = useState("No file chosen.");
+    const error = useSelector((state) => state.error);
+    const dispatch = useDispatch();
 
     const handleChange = () => {
         const file = document.getElementById("profile");
@@ -26,6 +32,7 @@ const AddUpdateContact = ({ edit }) => {
         formData.append("name", name);
         formData.append("phone", phone);
         formData.append("image", image);
+        dispatch(setProcess({ isProcessing: true }));
         if (edit) {
             updateContact(formData);
         } else {
@@ -34,30 +41,40 @@ const AddUpdateContact = ({ edit }) => {
     };
 
     const saveContact = async (formData) => {
-        await axios
-            .post("/contacts", formData, {
+        try {
+            await axios.post("/contacts", formData, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 }
-            })
-            .catch((e) => console.log(e.message));
-        navigate("/");
+            });
+            navigate("/");
+        } catch (e) {
+            dispatch(getError("Invalid inputs!"));
+            dispatch(setProcess({ isProcessing: false }));
+        }
     };
 
     const updateContact = async (formData) => {
-        await axios
-            .put(`/contacts/${contact._id}`, formData, {
+        try {
+            await axios.put(`/contacts/${contact._id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 }
-            })
-            .catch((e) => console.log(e.message));
-        navigate("/");
+            });
+            navigate("/");
+        } catch (e) {
+            dispatch(getError("Invalid inputs!"));
+            dispatch(setProcess({ isProcessing: false }));
+        }
     };
 
     useEffect(() => {
         setName(contact.name);
         setPhone(contact.phone);
+        return () => {
+            dispatch(clearError());
+            dispatch(setProcess({ isProcessing: false }));
+        };
     }, [contact]);
 
     return (
@@ -102,10 +119,16 @@ const AddUpdateContact = ({ edit }) => {
                             <span id="profile-name">{profileName}</span>
                         </div>
                     </div>
-                    {/* {!register && <p>Incorrect credentials!</p>} */}
+                    {error && <p>{error}</p>}
                     <div className="form-action">
-                        <button type="submit">
-                            {edit ? "Update" : "Save"}
+                        <button type="submit" disabled={isProcessing}>
+                            {edit
+                                ? isProcessing
+                                    ? "Updating"
+                                    : "Update"
+                                : isProcessing
+                                ? "Saving"
+                                : "Save"}
                         </button>
                     </div>
                 </form>

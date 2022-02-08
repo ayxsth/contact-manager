@@ -11,24 +11,26 @@ const ContactList = () => {
     const navigate = useNavigate();
 
     const fetchContacts = async () => {
-        const res = await axios
-            .get("/contacts", {
+        try {
+            const res = await axios.get("/contacts", {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 }
-            })
-            .catch((e) => navigate("/"));
-        dispatch(setContacts(res.data));
+            });
+            dispatch(setContacts(res.data));
+        } catch (e) {
+            navigate("/");
+        }
     };
 
     const deleteContact = async (id) => {
-        await axios
-            .delete(`/contacts/${id}`, {
+        try {
+            await axios.delete(`/contacts/${id}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 }
-            })
-            .catch((e) => console.log(e.message));
+            });
+        } catch (e) {}
         fetchContacts();
     };
 
@@ -40,35 +42,46 @@ const ContactList = () => {
         <div className="contact-wrapper">
             <h2>Contacts</h2>
             <div className="contacts">
-                {contacts.map((contact) => {
-                    return (
-                        <div className="contact" key={contact._id}>
-                            <img
-                                src={contact.image}
-                                alt="profile"
-                                width="100px"
-                            />
-                            <div className="contact-info">
-                                <h3>{contact.name}</h3>
-                                <span>{contact.phone}</span>
-                            </div>
-                            <div className="actions">
-                                <Link
-                                    className="btn"
-                                    to={`/update-contact/${contact._id}`}
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    className="btn"
-                                    onClick={() => deleteContact(contact._id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })}
+                {contacts.length > 0 &&
+                    contacts
+                        //sort by name
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map((contact) => {
+                            return (
+                                <div className="contact" key={contact._id}>
+                                    <img
+                                        src={contact.image}
+                                        alt="profile"
+                                        width="100px"
+                                    />
+                                    <div className="contact-info">
+                                        <h3>{contact.name}</h3>
+                                        <span>{contact.phone}</span>
+                                    </div>
+                                    <div className="actions">
+                                        <Link
+                                            className="btn"
+                                            to={`/update-contact/${contact._id}`}
+                                        >
+                                            Edit
+                                        </Link>
+                                        <button
+                                            className="btn"
+                                            onClick={() =>
+                                                deleteContact(contact._id)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                {contacts.length <= 0 && (
+                    <div className="no-data-wrapper">
+                        <h3 className="no-data">No contacts found!</h3>
+                    </div>
+                )}
             </div>
         </div>
     );

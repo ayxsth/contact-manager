@@ -200,6 +200,14 @@ input[type="number"]::-webkit-outer-spin-button {
     background-color: #005e94;
 }
 
+.btn:last-child:disabled,
+.form-action button:disabled,
+.sign-in:disabled,
+.sign-up:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .form-action a {
     font-size: 14px;
 }
@@ -259,4 +267,13 @@ input[type="number"]::-webkit-outer-spin-button {
 .btn:last-child:hover {
     background-color: #e64d67;
     color: #fff;
+}
+
+.no-data-wrapper {
+    padding: 5px;
+    background-color: #fff;
+    border-radius: 5px;
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
 }

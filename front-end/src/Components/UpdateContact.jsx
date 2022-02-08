@@ -10,14 +10,16 @@ const UpdateContact = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const fetchContact = async (id) => {
-        const res = await axios
-            .get(`/contacts/${id}`, {
+        try {
+            const res = await axios.get(`/contacts/${id}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 }
-            })
-            .catch((e) => navigate("/"));
-        dispatch(setContact(res.data));
+            });
+            dispatch(setContact(res.data));
+        } catch (e) {
+            navigate("/");
+        }
     };
 
     useEffect(() => {

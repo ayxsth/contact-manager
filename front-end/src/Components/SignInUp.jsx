@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import axios from "axios";
 import { authUser } from "../redux/actions/auth";
 import { getError, clearError } from "../redux/actions/error";
-import { useEffect } from "react";
+import { setProcess } from "../redux/actions/process";
 
 const SignInUp = ({ register }) => {
     const [email, setEmail] = useState("");
@@ -12,6 +13,8 @@ const SignInUp = ({ register }) => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
+    const process = useSelector((state) => state.process);
+    const { isProcessing } = process;
     const error = useSelector((state) => state.error);
 
     const login = async (email, password) => {
@@ -21,6 +24,7 @@ const SignInUp = ({ register }) => {
             dispatch(authUser({ ...res.data, isAuthenticated: true }));
             navigate("/");
         } catch (e) {
+            dispatch(setProcess({ isProcessing: false }));
             dispatch(getError("Incorrect credentials!"));
         }
     };
@@ -32,6 +36,7 @@ const SignInUp = ({ register }) => {
             dispatch(authUser({ ...res.data, isAuthenticated: true }));
             navigate("/");
         } catch (e) {
+            dispatch(setProcess({ isProcessing: false }));
             dispatch(getError("Invalid inputs!"));
         }
     };
@@ -39,11 +44,18 @@ const SignInUp = ({ register }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(clearError());
+        dispatch(setProcess({ isProcessing: true }));
         if (register) singup(email, password);
         else login(email, password);
     };
 
-    useEffect(() => () => dispatch(clearError()), []);
+    useEffect(
+        () => () => {
+            dispatch(clearError());
+            dispatch(setProcess({ isProcessing: false }));
+        },
+        []
+    );
 
     return (
         <div>
@@ -74,8 +86,14 @@ const SignInUp = ({ register }) => {
                     </div>
                     {error && <p>{error}</p>}
                     <div className="form-action">
-                        <button type="submit">
-                            {register ? "Sign Up" : "Sign In"}
+                        <button type="submit" disabled={isProcessing}>
+                            {register
+                                ? isProcessing
+                                    ? "Signing Up"
+                                    : "Sign Up"
+                                : isProcessing
+                                ? "Signing In"
+                                : "Sign In"}
                         </button>
                         {register && (
                             <Link to={"/login"}>Already have an account?</Link>

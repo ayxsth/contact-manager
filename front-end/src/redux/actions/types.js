@@ -15,3 +15,4 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAILED = "REGISTER_FAILED";
 export const GET_ERROR = "GET_ERRORS";
 export const CLEAR_ERROR = "CLEAR_ERRORS";
+export const PROCESS = "PROCESS";
