@@ -1,25 +1,13 @@
-import { GET_ERRORS, CLEAR_ERRORS } from "../actions/types";
+import { GET_ERROR, CLEAR_ERROR } from "../actions/types";
 
-const initialState = {
-    message: {},
-    status: null,
-    id: null
-};
+const initialState = "";
 
 const error = function (state = initialState, action) {
     switch (action.type) {
-        case GET_ERRORS:
-            return {
-                message: action.payload.message,
-                status: action.payload.status,
-                id: action.payload.id
-            };
-        case CLEAR_ERRORS:
-            return {
-                message: {},
-                status: null,
-                id: null
-            };
+        case GET_ERROR:
+            return action.payload;
+        case CLEAR_ERROR:
+            return "";
         default:
             return state;
     }

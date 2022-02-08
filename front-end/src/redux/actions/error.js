@@ -1,16 +1,16 @@
-import { GET_ERRORS, CLEAR_ERRORS } from "./types";
+import { GET_ERROR, CLEAR_ERROR } from "./types";
 
 //return errors
-export const returnErrors = (message, status, id = null) => {
+export const getError = (payload) => {
     return {
-        type: GET_ERRORS,
-        payload: { message, status, id }
+        type: GET_ERROR,
+        payload
     };
 };
 
 //clear errors
-export const clearErrors = () => {
+export const clearError = () => {
     return {
-        type: CLEAR_ERRORS
+        type: CLEAR_ERROR
     };
 };

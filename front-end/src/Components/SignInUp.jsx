@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { authUser } from "../redux/actions/auth";
+import { getError, clearError } from "../redux/actions/error";
+import { useEffect } from "react";
 
 const SignInUp = ({ register }) => {
     const [email, setEmail] = useState("");
@@ -10,30 +12,38 @@ const SignInUp = ({ register }) => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
+    const error = useSelector((state) => state.error);
 
     const login = async (email, password) => {
-        const res = await axios
-            .post("/signin", { email, password })
-            .catch((e) => console.log(e));
-        sessionStorage.setItem("token", res.data.token);
-        dispatch(authUser({ ...res.data, isAuthenticated: true }));
-        navigate("/");
+        try {
+            const res = await axios.post("/signin", { email, password });
+            sessionStorage.setItem("token", res.data.token);
+            dispatch(authUser({ ...res.data, isAuthenticated: true }));
+            navigate("/");
+        } catch (e) {
+            dispatch(getError("Incorrect credentials!"));
+        }
     };
 
     const singup = async (email, password) => {
-        const res = await axios
-            .post("/signup", { email, password })
-            .catch((e) => console.log(e));
-        sessionStorage.setItem("token", res.data.token);
-        dispatch(authUser({ ...res.data, isAuthenticated: true }));
-        navigate("/");
+        try {
+            const res = await axios.post("/signup", { email, password });
+            sessionStorage.setItem("token", res.data.token);
+            dispatch(authUser({ ...res.data, isAuthenticated: true }));
+            navigate("/");
+        } catch (e) {
+            dispatch(getError("Invalid inputs!"));
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        dispatch(clearError());
         if (register) singup(email, password);
         else login(email, password);
     };
+
+    useEffect(() => () => dispatch(clearError()), []);
 
     return (
         <div>
@@ -62,7 +72,7 @@ const SignInUp = ({ register }) => {
                             required
                         />
                     </div>
-                    {!register && <p>Incorrect credentials!</p>}
+                    {error && <p>{error}</p>}
                     <div className="form-action">
                         <button type="submit">
                             {register ? "Sign Up" : "Sign In"}
