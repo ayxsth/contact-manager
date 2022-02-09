@@ -61,103 +61,111 @@ const ContactList = () => {
 
     return (
         <div className="contact-wrapper">
-            {contacts.find((contact) => contact.favorite) && (
-                <div className="contacts">
-                    <h2>Favorite Contacts</h2>
-                    {contacts
-                        .filter((contact) => contact.favorite)
-                        .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((contact) => {
-                            return (
-                                <div className="contact" key={contact._id}>
-                                    <img
-                                        src={contact.image}
-                                        alt="profile"
-                                        width="100px"
-                                    />
-                                    <div className="contact-info">
-                                        <h3>{contact.name}</h3>
-                                        <span>{contact.phone}</span>
-                                    </div>
-                                    <div className="actions">
-                                        <button
-                                            className="btn unfav"
-                                            onClick={() => {
-                                                handleUnfav(contact._id);
-                                                fetchContacts();
-                                            }}
-                                        >
-                                            Unfavorite
-                                        </button>
-                                        <Link
-                                            className="btn"
-                                            to={`/update-contact/${contact._id}`}
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            className="btn"
-                                            onClick={() =>
-                                                deleteContact(contact._id)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            );
-                        })}
+            {!contacts.length && (
+                <div className="no-data-wrapper">
+                    <h3 className="no-data">No contacts found!</h3>
                 </div>
             )}
 
-            {contacts.find((contact) => !contact.favorite) && (
-                <div className="contacts">
-                    <h2>Contacts</h2>
-                    {contacts
-                        .filter((contact) => !contact.favorite)
-                        .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((contact) => {
-                            return (
-                                <div className="contact" key={contact._id}>
-                                    <img
-                                        src={contact.image}
-                                        alt="profile"
-                                        width="100px"
-                                    />
-                                    <div className="contact-info">
-                                        <h3>{contact.name}</h3>
-                                        <span>{contact.phone}</span>
+            {contacts.length > 0 &&
+                contacts.find((contact) => contact.favorite) && (
+                    <div className="contacts">
+                        <h2>Favorite Contacts</h2>
+                        {contacts
+                            .filter((contact) => contact.favorite)
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((contact) => {
+                                return (
+                                    <div className="contact" key={contact._id}>
+                                        <img
+                                            src={contact.image}
+                                            alt="profile"
+                                            width="100px"
+                                        />
+                                        <div className="contact-info">
+                                            <h3>{contact.name}</h3>
+                                            <span>{contact.phone}</span>
+                                        </div>
+                                        <div className="actions">
+                                            <button
+                                                className="btn unfav"
+                                                onClick={() => {
+                                                    handleUnfav(contact._id);
+                                                    fetchContacts();
+                                                }}
+                                            >
+                                                Unfavorite
+                                            </button>
+                                            <Link
+                                                className="btn"
+                                                to={`/update-contact/${contact._id}`}
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button
+                                                className="btn"
+                                                onClick={() =>
+                                                    deleteContact(contact._id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="actions">
-                                        <button
-                                            className="btn fav"
-                                            onClick={() => {
-                                                handleFav(contact._id);
-                                                fetchContacts();
-                                            }}
-                                        >
-                                            Favorite
-                                        </button>
-                                        <Link
-                                            className="btn"
-                                            to={`/update-contact/${contact._id}`}
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            className="btn"
-                                            onClick={() =>
-                                                deleteContact(contact._id)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
+                                );
+                            })}
+                    </div>
+                )}
+
+            {contacts.length > 0 &&
+                contacts.find((contact) => !contact.favorite) && (
+                    <div className="contacts">
+                        <h2>Contacts</h2>
+                        {contacts
+                            .filter((contact) => !contact.favorite)
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((contact) => {
+                                return (
+                                    <div className="contact" key={contact._id}>
+                                        <img
+                                            src={contact.image}
+                                            alt="profile"
+                                            width="100px"
+                                        />
+                                        <div className="contact-info">
+                                            <h3>{contact.name}</h3>
+                                            <span>{contact.phone}</span>
+                                        </div>
+                                        <div className="actions">
+                                            <button
+                                                className="btn fav"
+                                                onClick={() => {
+                                                    handleFav(contact._id);
+                                                    fetchContacts();
+                                                }}
+                                            >
+                                                Favorite
+                                            </button>
+                                            <Link
+                                                className="btn"
+                                                to={`/update-contact/${contact._id}`}
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button
+                                                className="btn"
+                                                onClick={() =>
+                                                    deleteContact(contact._id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                </div>
-            )}
+                                );
+                            })}
+                    </div>
+                )}
         </div>
     );
 };
