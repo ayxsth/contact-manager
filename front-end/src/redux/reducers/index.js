@@ -3,7 +3,6 @@ import auth from "./auth";
 import error from "./error";
 import contacts from "./contacts";
 import contact from "./contact";
-import user from "./user";
 import process from "./process";
 
 const rootReducer = combineReducers({
@@ -11,7 +10,6 @@ const rootReducer = combineReducers({
     error,
     contacts,
     contact,
-    user,
     process
 });
 

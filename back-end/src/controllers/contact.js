@@ -41,7 +41,7 @@ const viewAll = async (req, res) => {
 
 const update = async (req, res) => {
     const { id: _id } = req.params;
-    const allowedUpdates = ["name", "phone", "image"];
+    const allowedUpdates = ["name", "phone", "image", "favorite"];
     const updates = Object.keys(req.body);
     const isValidInputs = updates.every((update) =>
         allowedUpdates.includes(update)

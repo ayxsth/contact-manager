@@ -30,7 +30,28 @@ const ContactList = () => {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`
                 }
             });
+            fetchContacts();
         } catch (e) {}
+    };
+
+    const updateContact = async (id, data) => {
+        try {
+            await axios.put(`/contacts/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem("token")}`
+                }
+            });
+            navigate("/");
+        } catch (e) {}
+    };
+
+    const handleFav = (id) => {
+        updateContact(id, { favorite: true });
+        fetchContacts();
+    };
+
+    const handleUnfav = (id) => {
+        updateContact(id, { favorite: false });
         fetchContacts();
     };
 
@@ -40,11 +61,11 @@ const ContactList = () => {
 
     return (
         <div className="contact-wrapper">
-            <h2>Contacts</h2>
-            <div className="contacts">
-                {contacts.length > 0 &&
-                    contacts
-                        //sort by name
+            {contacts.find((contact) => contact.favorite) && (
+                <div className="contacts">
+                    <h2>Favorite Contacts</h2>
+                    {contacts
+                        .filter((contact) => contact.favorite)
                         .sort((a, b) => a.name.localeCompare(b.name))
                         .map((contact) => {
                             return (
@@ -59,6 +80,15 @@ const ContactList = () => {
                                         <span>{contact.phone}</span>
                                     </div>
                                     <div className="actions">
+                                        <button
+                                            className="btn unfav"
+                                            onClick={() => {
+                                                handleUnfav(contact._id);
+                                                fetchContacts();
+                                            }}
+                                        >
+                                            Unfavorite
+                                        </button>
                                         <Link
                                             className="btn"
                                             to={`/update-contact/${contact._id}`}
@@ -77,12 +107,57 @@ const ContactList = () => {
                                 </div>
                             );
                         })}
-                {contacts.length <= 0 && (
-                    <div className="no-data-wrapper">
-                        <h3 className="no-data">No contacts found!</h3>
-                    </div>
-                )}
-            </div>
+                </div>
+            )}
+
+            {contacts.find((contact) => !contact.favorite) && (
+                <div className="contacts">
+                    <h2>Contacts</h2>
+                    {contacts
+                        .filter((contact) => !contact.favorite)
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map((contact) => {
+                            return (
+                                <div className="contact" key={contact._id}>
+                                    <img
+                                        src={contact.image}
+                                        alt="profile"
+                                        width="100px"
+                                    />
+                                    <div className="contact-info">
+                                        <h3>{contact.name}</h3>
+                                        <span>{contact.phone}</span>
+                                    </div>
+                                    <div className="actions">
+                                        <button
+                                            className="btn fav"
+                                            onClick={() => {
+                                                handleFav(contact._id);
+                                                fetchContacts();
+                                            }}
+                                        >
+                                            Favorite
+                                        </button>
+                                        <Link
+                                            className="btn"
+                                            to={`/update-contact/${contact._id}`}
+                                        >
+                                            Edit
+                                        </Link>
+                                        <button
+                                            className="btn"
+                                            onClick={() =>
+                                                deleteContact(contact._id)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                </div>
+            )}
         </div>
     );
 };

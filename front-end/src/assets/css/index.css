@@ -277,3 +277,26 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0 auto;
     text-align: center;
 }
+
+.fav {
+    border: 2px solid #e64d67;
+    color: #e64d67;
+    cursor: pointer;
+}
+
+.fav:hover {
+    color: #fff;
+    background-color: #e64d67;
+}
+
+.unfav {
+    border: 2px solid #e64d67;
+    background-color: #e64d67;
+    color: #fff;
+    cursor: pointer;
+}
+
+.unfav:hover {
+    background-color: #fff;
+    color: #e64d67;
+}
