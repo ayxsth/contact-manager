@@ -32,6 +32,7 @@ const AddUpdateContact = ({ edit }) => {
         formData.append("name", name);
         formData.append("phone", phone);
         formData.append("image", image);
+        dispatch(clearError());
         dispatch(setProcess({ isProcessing: true }));
         if (edit) {
             updateContact(formData);
